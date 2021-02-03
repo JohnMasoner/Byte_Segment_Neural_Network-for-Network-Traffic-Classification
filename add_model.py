@@ -88,12 +88,9 @@ def The_Model(value, feature_cnt, Model_name, dim):
         model_output = keras.layers.Dropout(0.5)(inputs)
         model_output = keras.layers.Embedding(value.shape[0], 256, input_length = value.shape[1])(model_output)
         model_output = keras.layers.Bidirectional(keras.layers.LSTM(128))(model_output)
-        # model_output = Attention_Model(model_output, CLASS_NUM, dim)s
-        # model_output = keras.layers.Lambda(lambda z: keras.backend.expand_dims(z, axis=-1))(model_output)
-        model_output = Attention(name='atten')(model_output)
-        # model_output = tf.cast(model_output, tf.float32) # 10
-        # model_output = keras.layers.multiply([model_output, at_inputs])
-        # model_output = keras.layers.Embedding(value.shape[0], dim, input_length = value.shape[1])(model_output)
+        model_output = Attention_Model(model_output, CLASS_NUM, dim)
+        model_output = keras.layers.Lambda(lambda z: keras.backend.expand_dims(z, axis=-1))(model_output)
+        
     elif Model_name == 'GRU':
         model_output = keras.layers.Embedding(value.shape[0], 256, input_length = value.shape[1])(inputs)
         model_output = keras.layers.Bidirectional(keras.layers.GRU(128))(model_output)
@@ -108,7 +105,7 @@ def The_Model(value, feature_cnt, Model_name, dim):
 inputs, model_output = The_Model(train_value, 10, 'GRU', 64)
 model = keras.Model(inputs=inputs,outputs=model_output,name='model12')
 sgd = keras.optimizers.SGD(learning_rate=0.1)
-model.compile(loss=[focal_loss.categorical_focal_loss(alpha=.25, gamma=2)], metrics=["accuracy"], optimizer=sgd)
+model.compile(loss=[focal_loss.categorical_focal_loss(alpha=[0.09, 0.1, 0.12, 0.1, 0.11, 0.09, 0.11, 0.13, 0.11, 0.04], gamma=2)], metrics=["accuracy"], optimizer=sgd)
 model.summary()
 
 print(segments_gen(train_value, segments_N)[0].shape, tarin_labels.shape)
