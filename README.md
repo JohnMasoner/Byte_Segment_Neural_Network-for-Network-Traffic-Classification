@@ -15,6 +15,12 @@ if you want to change the gamma and alpha of the loss function ,you need to chan
 
 you can change the config in the add_model.py[13-16]
 
+
+
+You can download the model's weights file
+
+https://drive.google.com/file/d/1Ri-GQtCXFTh--Q6Hj2Y28qPxE-4wHalY/view
+
 ## Paper
 
 ```latex
