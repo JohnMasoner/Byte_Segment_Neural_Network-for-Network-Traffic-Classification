@@ -14,6 +14,7 @@ DATA_DIR = 'Data' # data directory
 CLASS_NUM = 10 # number of classes
 dim = 32 # number of dimensions
 epochs_num = 20 # number of epochs
+segments_N = 5
 dict = {}
 
 sess = tf.compat.v1.InteractiveSession()
@@ -110,7 +111,7 @@ sgd = keras.optimizers.SGD(learning_rate=0.1)
 model.compile(loss=[focal_loss.categorical_focal_loss(alpha=.25, gamma=2)], metrics=["accuracy"], optimizer=sgd)
 model.summary()
 
-print(segments_gen(train_value, 5)[0].shape, tarin_labels.shape)
+print(segments_gen(train_value, segments_N)[0].shape, tarin_labels.shape)
 tensorboard_callback = keras.callbacks.TensorBoard(log_dir='./logs',
                  histogram_freq=0,
                  write_graph=True, 
@@ -122,7 +123,7 @@ tensorboard_callback = keras.callbacks.TensorBoard(log_dir='./logs',
 
 checkpointer = keras.callbacks.ModelCheckpoint('model',
                                    verbose=1, save_weights_only=False, period=1)
-model.fit(segments_gen(train_value, 3), tarin_labels,
+model.fit(segments_gen(train_value, segments_N), tarin_labels,
           batch_size=128,
           epochs=epochs_num,
           validation_data=(test_images, test_labels),
